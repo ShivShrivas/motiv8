@@ -5,11 +5,13 @@
     <!-- Second gradient layer -->
     <item>
         <shape>
+
             <gradient
                 android:startColor="#FF8222"
                 android:centerColor="#130937"
                 android:endColor="#000000"
                 android:centerX=".15"
+
                 android:useLevel="true"
                 android:type="linear"
                 android:angle="135"/>
