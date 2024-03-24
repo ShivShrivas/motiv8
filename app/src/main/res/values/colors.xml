@@ -2,9 +2,71 @@
 <resources>
     <color name="purple_200">#4400BF</color>
     <color name="purple_500">#3C009C</color>
-    <color name="purple_700">#280081</color>
-    <color name="teal_200">#e83e8c</color>
-    <color name="teal_700">#dc3545</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="purple_700">#2A0066</color>
+    <color name="teal_200">#E89E3E</color>
+    <color name="teal_700">#DC8635</color>
+    <!-- Shades of white -->
+
+    <color name="white">#FFFFFF</color>
+    <color name="off_white">#FAFAFA</color>
+    <color name="ivory">#FFFFF0</color>
+    <color name="snow">#FFFAFA</color>
+    <color name="ghost_white">#F8F8FF</color>
+
+    <!-- Shades of Black -->
+    <color name="black">#000000</color>
+    <color name="dark_black">#111111</color>
+    <color name="charcoal">#333333</color>
+    <color name="slate_gray">#708090</color>
+    <color name="ebony">#555D50</color>
+
+    <!-- Shades of Red -->
+    <color name="red">#FF0000</color>
+    <color name="dark_red">#8B0000</color>
+    <color name="crimson">#DC143C</color>
+    <color name="maroon">#800000</color>
+    <color name="light_red">#FFC0CB</color>
+
+    <!-- Shades of Green -->
+    <color name="green">#00FF00</color>
+    <color name="dark_green">#006400</color>
+    <color name="forest_green">#228B22</color>
+    <color name="lime_green">#32CD32</color>
+    <color name="olive">#808000</color>
+
+    <!-- Shades of Blue -->
+    <color name="blue">#0000FF</color>
+    <color name="dark_blue">#00008B</color>
+    <color name="navy">#000080</color>
+    <color name="sky_blue">#87CEEB</color>
+    <color name="light_blue">#ADD8E6</color>
+
+    <!-- Shades of Yellow -->
+    <color name="yellow">#FFFF00</color>
+    <color name="dark_yellow">#FFD700</color>
+    <color name="gold">#FFD700</color>
+    <color name="light_yellow">#FFFFE0</color>
+    <color name="lemon">#FFFACD</color>
+
+    <!-- Shades of Cyan -->
+    <color name="cyan">#00FFFF</color>
+    <color name="dark_cyan">#008B8B</color>
+    <color name="turquoise">#40E0D0</color>
+    <color name="aqua">#00FFFF</color>
+    <color name="light_cyan">#E0FFFF</color>
+
+    <!-- Shades of Magenta -->
+    <color name="magenta">#FF00FF</color>
+    <color name="dark_magenta">#8B008B</color>
+    <color name="orchid">#DA70D6</color>
+    <color name="purple">#800080</color>
+    <color name="light_magenta">#FFB6C1</color>
+
+    <!-- Shades of Gray -->
+    <color name="gray">#808080</color>
+    <color name="dark_gray">#A9A9A9</color>
+    <color name="light_gray">#D3D3D3</color>
+    <color name="silver">#C0C0C0</color>
+    <color name="ash_gray">#B2BEB5</color>
+
 </resources>
