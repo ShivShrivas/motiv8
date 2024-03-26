@@ -2,10 +2,9 @@
 <resources>
     <color name="purple_200">#4400BF</color>
     <color name="purple_500">#3C009C</color>
-    <color name="purple_700">#280081</color>
-    <color name="teal_200">#e83e8c</color>
-    <color name="teal_700">#dc3545</color>
-
+    <color name="purple_700">#2A0066</color>
+    <color name="teal_200">#E89E3E</color>
+    <color name="teal_700">#DC8635</color>
     <!-- Shades of white -->
 
     <color name="white">#FFFFFF</color>
@@ -40,7 +39,6 @@
     <color name="dark_blue">#00008B</color>
     <color name="navy">#000080</color>
     <color name="sky_blue">#87CEEB</color>
-    <color name="navy_blue">#3068AC</color>
     <color name="light_blue">#ADD8E6</color>
 
     <!-- Shades of Yellow -->
@@ -48,7 +46,6 @@
     <color name="dark_yellow">#FFD700</color>
     <color name="gold">#FFD700</color>
     <color name="light_yellow">#FFFFE0</color>
-    <color name="light_orange">#FFEAE0</color>
     <color name="lemon">#FFFACD</color>
 
     <!-- Shades of Cyan -->
@@ -71,4 +68,5 @@
     <color name="light_gray">#D3D3D3</color>
     <color name="silver">#C0C0C0</color>
     <color name="ash_gray">#B2BEB5</color>
+
 </resources>
