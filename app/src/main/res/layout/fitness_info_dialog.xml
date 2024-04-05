@@ -1,0 +1,44 @@
+<!-- dialog_fitness_info.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/text_steps"
+        android:layout_width="match_parent"
+        android:fontFamily="@font/rubik_regular"
+        android:textColor="@color/purple_200"
+        android:textStyle="bold"
+        android:textSize="15dp"
+        android:layout_height="wrap_content"
+        android:text="Total Steps: " />
+
+    <TextView
+        android:id="@+id/text_distance"
+        android:layout_width="match_parent"
+        android:fontFamily="@font/rubik_regular"
+        android:textColor="@color/purple_200"
+        android:textStyle="bold"
+        android:textSize="15dp"
+
+        android:layout_height="wrap_content"
+        android:text="Total Distance: " />
+
+    <TextView
+        android:id="@+id/text_calories"
+        android:layout_width="match_parent"
+        android:fontFamily="@font/rubik_regular"
+        android:textColor="@color/purple_200"
+        android:textStyle="bold"
+        android:textSize="15dp"
+        android:layout_height="wrap_content"
+        android:text="Estimated Calories Burnt: " />
+
+    <Button
+        android:id="@+id/button_close"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Close" />
+</LinearLayout>

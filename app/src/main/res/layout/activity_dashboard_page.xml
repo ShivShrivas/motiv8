@@ -104,7 +104,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:backgroundTint="#3C4400BF"
+        android:backgroundTint="@color/purple_200"
         app:cardCornerRadius="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -165,6 +165,47 @@
 
     </androidx.cardview.widget.CardView>
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cvStepStopCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/purple_200"
+        android:elevation="5dp"
+        app:cardCornerRadius="18dp"
+        app:cardElevation="5dp"
+        app:cardMaxElevation="5dp"
+        app:layout_constraintEnd_toEndOf="@+id/cardView3"
+        app:layout_constraintStart_toStartOf="@+id/cardView3"
+        app:layout_constraintTop_toBottomOf="@+id/cardView3">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="20dp"
+                android:src="@drawable/step_ic" />
+
+            <TextView
+                android:id="@+id/txtStartStopCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/rubik_semibold"
+                android:text="Stop Step Counting"
+
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView10"
@@ -173,7 +214,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:backgroundTint="#8D1B0E32"
+        android:backgroundTint="@color/purple_200"
         app:cardCornerRadius="20dp"
         app:layout_constraintBottom_toTopOf="@+id/cardView4"
         app:layout_constraintEnd_toEndOf="parent"
@@ -186,6 +227,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_weight=".8"
+        android:paddingStart="8dp"
         android:textColor="@color/white"
         android:textAlignment="textStart"
 
@@ -198,7 +240,7 @@
     <Button
         android:id="@+id/loginButton"
         android:layout_marginStart="30dp"
-
+        android:layout_marginEnd="8dp"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_weight="1"
@@ -218,7 +260,7 @@
         android:layout_marginBottom="-20dp"
         android:layout_width="0dp"
         android:layout_height="300dp"
-        android:backgroundTint="#8D1B0E32"
+        android:backgroundTint="@color/purple_200"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/imageView2"

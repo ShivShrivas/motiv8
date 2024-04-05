@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.motiv.motiv8.Retrofit.ApiService;
 import com.motiv.motiv8.Retrofit.RestClient;
+import com.motiv.motiv8.model.HomePage;
 import com.motiv.motiv8.model.LoginResponse;
 
 import retrofit2.Call;
@@ -51,10 +52,12 @@ EditText etpassword,etusername;
                        @Override
                        public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                            Log.d("TAG", "onResponse: "+response.body().getStatusMessage());
+                           Log.d("TAG", "onResponse: "+response.body().getUserDetail().getStrFullName());
                            if (response.isSuccessful()){
                                LoginResponse loginResponse=response.body();
                                if (loginResponse.getUserDetail()!=null){
-                                   Intent i=new Intent(MainActivity.this,Dashboard_Page.class);
+                                   Intent i=new Intent(MainActivity.this, HomePage.class);
+                                   i.putExtra("username",loginResponse.getUserDetail().getStrFullName().isEmpty()?"Unknown":loginResponse.getUserDetail().getStrFullName());
                                                                     startActivity(i);
                                }else{
                                    Toast.makeText(MainActivity.this, loginResponse.getStatusMessage(), Toast.LENGTH_SHORT).show();
