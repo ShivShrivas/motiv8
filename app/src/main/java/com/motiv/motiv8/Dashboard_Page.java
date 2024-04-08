@@ -38,6 +38,7 @@ import com.google.android.gms.fitness.result.DataReadResponse;
 import com.google.android.gms.fitness.result.DataReadResult;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.motiv.motiv8.BackgroundServices.StepCountingService;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -213,6 +214,8 @@ TextView txtStartStopCount;
                         })
                         .build();
                 mClient.connect();
+                Intent serviceIntent = new Intent(this, StepCountingService.class);
+                startService(serviceIntent);
             } else {
                 // Sign-in failed or user canceled the operation
                 Log.d("TAG", "Sign-in failed or user canceled");
