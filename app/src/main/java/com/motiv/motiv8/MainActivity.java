@@ -51,8 +51,6 @@ EditText etpassword,etusername;
                    call.enqueue(new Callback<LoginResponse>() {
                        @Override
                        public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                           Log.d("TAG", "onResponse: "+response.body().getStatusMessage());
-                           Log.d("TAG", "onResponse: "+response.body().getUserDetail().getStrFullName());
                            if (response.isSuccessful()){
                                LoginResponse loginResponse=response.body();
                                if (loginResponse.getUserDetail()!=null){
@@ -63,7 +61,10 @@ EditText etpassword,etusername;
                                    Toast.makeText(MainActivity.this, loginResponse.getStatusMessage(), Toast.LENGTH_SHORT).show();
                                }
 
+                           }else{
+                               Toast.makeText(MainActivity.this, "Login Failed!", Toast.LENGTH_SHORT).show();
                            }
+
                        }
 
                        @Override
