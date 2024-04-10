@@ -26,6 +26,7 @@ import com.google.android.gms.fitness.request.OnDataPointListener;
 import com.motiv.motiv8.BackgroundServices.StepCountingService;
 import com.motiv.motiv8.Dashboard_Page;
 import com.motiv.motiv8.R;
+import com.motiv.motiv8.UI.ProfilePage;
 
 public class HomePage extends AppCompatActivity {
 
@@ -56,6 +57,7 @@ public class HomePage extends AppCompatActivity {
 
     int firstTimeGetData=0;
     TextView txtStepCount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +68,12 @@ public class HomePage extends AppCompatActivity {
         userName= intent.getStringExtra("username");
         txtUserName.setText(userName);
         txtStepCount=findViewById(R.id.txtStepCount);
+        findViewById(R.id.cvProfilePic).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(HomePage.this, ProfilePage.class));
+            }
+        });
 
         handler = new Handler(Looper.getMainLooper());
         GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

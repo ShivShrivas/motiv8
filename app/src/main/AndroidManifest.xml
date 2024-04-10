@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:allowBackup="true"
@@ -17,6 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Motiv8"
         tools:targetApi="31">
+        <activity
+            android:name=".UI.ProfilePage"
+            android:exported="false" />
         <activity
             android:name=".model.HomePage"
             android:exported="false" />
@@ -41,6 +44,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true" />
+
         <service android:name=".BackgroundServices.StepCountingService" />
     </application>
 
