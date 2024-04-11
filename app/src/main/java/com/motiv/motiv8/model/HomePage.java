@@ -8,11 +8,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +27,7 @@ import com.google.android.gms.fitness.Fitness;
 import com.google.android.gms.fitness.request.OnDataPointListener;
 import com.motiv.motiv8.BackgroundServices.StepCountingService;
 import com.motiv.motiv8.Dashboard_Page;
+import com.motiv.motiv8.MenuPage;
 import com.motiv.motiv8.R;
 import com.motiv.motiv8.UI.ProfilePage;
 
@@ -57,6 +60,7 @@ public class HomePage extends AppCompatActivity {
 
     int firstTimeGetData=0;
     TextView txtStepCount;
+    ImageView ic_menubar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,10 +68,17 @@ public class HomePage extends AppCompatActivity {
         setContentView(R.layout.activity_home_page);
         intent=getIntent();
         txtUserName=findViewById(R.id.txtUserName);
-        cvStepCount=findViewById(R.id.cvStepCount);
+        ic_menubar=findViewById(R.id.ic_menubar);
+      //  cvStepCount=findViewById(R.id.cvStepCount);
         userName= intent.getStringExtra("username");
         txtUserName.setText(userName);
         txtStepCount=findViewById(R.id.txtStepCount);
+        ic_menubar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(HomePage.this, MenuPage.class));
+            }
+        });
         findViewById(R.id.cvProfilePic).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,12 +95,12 @@ public class HomePage extends AppCompatActivity {
         GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, signInOptions);
         Intent signInIntent = googleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, 1100);
-        cvStepCount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-           //     startActivity(new Intent(HomePage.this, Dashboard_Page.class));
-            }
-        });
+//        cvStepCount.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//           //     startActivity(new Intent(HomePage.this, Dashboard_Page.class));
+//            }
+//        });
         // Register broadcast receiver
         stepCountReceiver = new BroadcastReceiver() {
             @Override

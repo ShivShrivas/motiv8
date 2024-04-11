@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.motiv.motiv8.R;
@@ -24,6 +25,7 @@ public class ProfilePage extends AppCompatActivity {
     EditText editTextNumber;
     EditText editTextEmail;
     Button button;
+    ImageView ivArrowBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +43,13 @@ public class ProfilePage extends AppCompatActivity {
         editTextNumber = findViewById(R.id.editTextNumber);
         editTextEmail = findViewById(R.id.editTextEmail);
         button = findViewById(R.id.button);
+        ivArrowBack = findViewById(R.id.ivArrowBack);
+        ivArrowBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
 
         edit_text.setOnClickListener(new View.OnClickListener() {

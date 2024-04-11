@@ -6,7 +6,11 @@
     <item>
         <shape>
 
-           <solid android:color="@color/purple_700"/>
+           <gradient
+               android:angle="270"
+               android:startColor="#08090E"
+               android:endColor="#23004C"
+               />
         </shape>
     </item>
 </layer-list>
