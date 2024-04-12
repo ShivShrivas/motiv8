@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.motiv.motiv8.Retrofit.ApiService;
 import com.motiv.motiv8.Retrofit.RestClient;
-import com.motiv.motiv8.model.HomePage;
+
 import com.motiv.motiv8.model.LoginResponse;
 
 import retrofit2.Call;

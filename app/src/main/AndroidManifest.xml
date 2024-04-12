@@ -7,6 +7,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+
+
 
     <application
         android:allowBackup="true"
@@ -24,7 +27,7 @@
             android:name=".UI.ProfilePage"
             android:exported="false" />
         <activity
-            android:name=".model.HomePage"
+            android:name=".HomePage"
             android:exported="false" />
         <activity
             android:name=".ReferPage"
@@ -47,8 +50,20 @@
         <activity
             android:name=".MainActivity"
             android:exported="true" />
+        <service
+            android:name=".BackgroundServices.StepCountingService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="location"
+            android:stopWithTask="false"
+            />
 
-        <service android:name=".BackgroundServices.StepCountingService" />
+        <receiver
+            android:name=".BackgroundServices.CountReciver"
+            android:exported="false">
+            <!-- If your receiver is intended to be accessible from outside your app -->
+            <!-- Specify other attributes as needed -->
+        </receiver>
     </application>
 
 </manifest>

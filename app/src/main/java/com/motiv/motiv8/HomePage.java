@@ -1,6 +1,7 @@
-package com.motiv.motiv8.model;
+package com.motiv.motiv8;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
@@ -9,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.Image;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -25,13 +27,14 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.fitness.Fitness;
 import com.google.android.gms.fitness.request.OnDataPointListener;
+import com.motiv.motiv8.BackgroundServices.CountReciver;
 import com.motiv.motiv8.BackgroundServices.StepCountingService;
 import com.motiv.motiv8.Dashboard_Page;
 import com.motiv.motiv8.MenuPage;
 import com.motiv.motiv8.R;
 import com.motiv.motiv8.UI.ProfilePage;
 
-public class HomePage extends AppCompatActivity {
+public class HomePage extends AppCompatActivity implements CountReciver.StepCountUpdateListener{
 
     String userName;
     TextView txtUserName;
@@ -62,6 +65,7 @@ public class HomePage extends AppCompatActivity {
     TextView txtStepCount;
     ImageView ic_menubar;
 
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,20 +106,18 @@ public class HomePage extends AppCompatActivity {
 //            }
 //        });
         // Register broadcast receiver
-        stepCountReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                int totalSteps = intent.getIntExtra("totalSteps", 0);
-                if (firstTimeGetData<5){
-
-                    txtStepCount.setText("Total Steps:  "+String.valueOf(startStep));
-                    firstTimeGetData++;
-                }
-                updateTotalSteps(totalSteps);
-            }
-        };
+        stepCountReceiver = new CountReciver(this);
         IntentFilter filter = new IntentFilter("step_count_broadcast");
-        registerReceiver(stepCountReceiver, filter);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(stepCountReceiver, filter, RECEIVER_EXPORTED);
+        }else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                registerReceiver(stepCountReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+            }else {
+                registerReceiver(stepCountReceiver, filter);
+            }
+        }
     }
     private void updateTotalSteps(int steps) {
 
@@ -165,6 +167,15 @@ public class HomePage extends AppCompatActivity {
                 Log.d("TAG", "Sign-in failed or user canceled");
                 Toast.makeText(this, "Sign-in failed or user canceled", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    @Override
+    public void onStepCountUpdate(int totalSteps) {
+        startStep++;
+        txtStepCount.setText("Total Steps: " + startStep);
+        if (startStep >= totalSteps) {
+            startStep = totalSteps;
         }
     }
 }
