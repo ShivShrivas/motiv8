@@ -90,7 +90,11 @@ public class StepCountingService extends Service {
     public void onDestroy() {
         super.onDestroy();
         isRunning = false;
-        // Unsubscribe from step count updates and disconnect Google Fit API client
+        if (mClient != null && mClient.isConnected()) {
+            Fitness.SensorsApi.remove(mClient, onDataPointListener);
+            mClient.disconnect();
+            Log.d("TAG", "onDestroy: ");
+        }
     }
 
     @Override

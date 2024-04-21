@@ -5,7 +5,12 @@ package com.motiv.motiv8.Retrofit;
 import android.util.JsonReader;
 
 import com.google.gson.JsonObject;
+import com.motiv.motiv8.model.AllLedgerResponse;
+import com.motiv.motiv8.model.AllPointLedgerResponse;
+import com.motiv.motiv8.model.AllProductResponse;
 import com.motiv.motiv8.model.LoginResponse;
+import com.motiv.motiv8.model.PincodeResponse;
+import com.motiv.motiv8.model.PushStepResponse;
 import com.motiv.motiv8.model.RegistrationResponse;
 
 import java.util.List;
@@ -42,6 +47,25 @@ public  interface ApiService {
 
     @PUT("Motiv8/RegisterAssociate")
     Call<RegistrationResponse> doRegister(@Body JsonObject jsonObject);
+
+
+    @GET("Pincode/TTPLPincode")
+    Call<PincodeResponse> getPincodeDetails(@Query("pincode") String pincode);
+
+    @GET("motiv8/productList")
+    Call<AllProductResponse> getAllProductList(@Query("sLoginID") String sLoginID,@Query("sPassword") String sPassword);
+
+    @GET("motiv8/PushStep")
+    Call<PushStepResponse> claimStepsWithDate(@Query("sLoginID") String sLoginID, @Query("sPassword") String sPassword,@Query("stepCnt") int stepCnt,@Query("forDateDDMMYYYY") String forDateDDMMYYYY);
+
+    @GET("motiv8/StepLedger")
+    Call<AllLedgerResponse> getAllLedger(@Query("sLoginID") String sLoginID, @Query("sPassword") String sPassword, @Query("fromDateDDMMYYYY") String fromDateDDMMYYYY,@Query("toDateDDMMYYYY") String toDateDDMMYYYY);
+
+
+    @GET("motiv8/PointLedger")
+    Call<AllPointLedgerResponse> getAllPointLedger(@Query("sLoginID") String sLoginID, @Query("sPassword") String sPassword, @Query("fromDateDDMMYYYY") String fromDateDDMMYYYY, @Query("toDateDDMMYYYY") String toDateDDMMYYYY);
+
+
 
 
 }

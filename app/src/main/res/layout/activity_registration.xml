@@ -137,7 +137,36 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/rubik_medium"
+                            android:text="Pin code"
+                            android:textColor="@color/white"
+                            android:textSize="13dp" />
+
+                        <EditText
+                            android:id="@+id/etPINCODE"
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+                            android:background="@drawable/border_grey"
+                            android:fontFamily="@font/rubik_lght"
+                            android:hint="Enter pin code"
+                            android:inputType="number"
+                            android:maxLength="6"
+                            android:paddingStart="8dp"
+                            android:textColor="@color/white"
+                            android:textColorHint="#E1E1E1"
+                            android:textSize="15dp" />
+                    </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -167,34 +196,7 @@
                             android:textSize="15dp" />
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:fontFamily="@font/rubik_medium"
-                            android:text="State"
-                            android:textColor="@color/white"
-                            android:textSize="13dp" />
-
-                        <EditText
-                            android:id="@+id/etState"
-                            android:layout_width="match_parent"
-                            android:layout_height="45dp"
-                            android:background="@drawable/border_grey"
-                            android:fontFamily="@font/rubik_lght"
-                            android:hint="Enter state name"
-                            android:paddingStart="8dp"
-                            android:textColor="@color/white"
-                            android:textColorHint="#E1E1E1"
-                            android:textSize="15dp" />
-                    </LinearLayout>
                 </LinearLayout>
 
 
@@ -243,19 +245,17 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:fontFamily="@font/rubik_medium"
-                            android:text="Pin code"
+                            android:text="State"
                             android:textColor="@color/white"
                             android:textSize="13dp" />
 
                         <EditText
-                            android:id="@+id/etPINCODE"
+                            android:id="@+id/etState"
                             android:layout_width="match_parent"
                             android:layout_height="45dp"
                             android:background="@drawable/border_grey"
                             android:fontFamily="@font/rubik_lght"
-                            android:hint="Enter pin code"
-                            android:inputType="number"
-                            android:maxLength="6"
+                            android:hint="Enter state name"
                             android:paddingStart="8dp"
                             android:textColor="@color/white"
                             android:textColorHint="#E1E1E1"

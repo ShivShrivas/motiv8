@@ -19,6 +19,8 @@ import android.widget.Toast;
 import com.google.gson.JsonObject;
 import com.motiv.motiv8.Retrofit.ApiService;
 import com.motiv.motiv8.Retrofit.RestClient;
+import com.motiv.motiv8.model.Pincode;
+import com.motiv.motiv8.model.PincodeResponse;
 import com.motiv.motiv8.model.RegistrationResponse;
 
 import javax.security.auth.login.LoginException;
@@ -26,6 +28,8 @@ import javax.security.auth.login.LoginException;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RegistrationActivity extends AppCompatActivity {
 EditText etPassword,etEmail,etName,etState,etCity,etCounry,etPINCODE,etMobile,etReferCode;
@@ -75,7 +79,64 @@ String referCode;
 
             }
         });
+        etPINCODE.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (etPINCODE.getText().toString().trim().length()==6){
+                 Retrofit   retrofit = new Retrofit.Builder()
+                            .baseUrl("https://api.tantrash.com/API/")
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+
+
+                    ApiService apiService=retrofit.create(ApiService.class);
+                    Call<PincodeResponse> call=apiService.getPincodeDetails(etPINCODE.getText().toString().trim());
+                    call.enqueue(new Callback<PincodeResponse>() {
+                        @Override
+                        public void onResponse(Call<PincodeResponse> call, Response<PincodeResponse> response) {
+                            if (response.isSuccessful()){
+                                PincodeResponse pincodeResponse=response.body();
+                                if (pincodeResponse.getPincodeList().size()>=1){
+
+                                    Pincode pincode=pincodeResponse.getPincodeList().get(0);
+                                    etCity.setText(pincode.getDistrictName());
+                                    etState.setText(pincode.getStateName());
+                                    etCounry.setText(pincode.getCountryName());
+                                }
+                            }else{
+                                etCity.setText("");
+                                etState.setText("");
+                                etCounry.setText("");
+                                Toast.makeText(RegistrationActivity.this, "Please check and enter correct PINCODE", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<PincodeResponse> call, Throwable t) {
+                            etCity.setText("");
+                            etState.setText("");
+                            etCounry.setText("");
+                            Toast.makeText(RegistrationActivity.this, "Sorry! we did not fetch the details", Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+                }else{
+                    etCity.setText("");
+                    etState.setText("");
+                    etCounry.setText("");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
         cbRef.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {

@@ -56,6 +56,8 @@ EditText etpassword,etusername;
                                if (loginResponse.getUserDetail()!=null){
                                    Intent i=new Intent(MainActivity.this, HomePage.class);
                                    i.putExtra("username",loginResponse.getUserDetail().getStrFullName().isEmpty()?"Unknown":loginResponse.getUserDetail().getStrFullName());
+                                   i.putExtra("userId",etusername.getText().toString().trim());
+                                   i.putExtra("password",etpassword.getText().toString().trim());
                                                                     startActivity(i);
                                }else{
                                    Toast.makeText(MainActivity.this, loginResponse.getStatusMessage(), Toast.LENGTH_SHORT).show();

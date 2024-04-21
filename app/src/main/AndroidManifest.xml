@@ -9,8 +9,6 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
 
-
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -20,6 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Motiv8"
         tools:targetApi="31">
+        <activity
+            android:name=".LedgerPage"
+            android:exported="false" />
         <activity
             android:name=".MenuPage"
             android:exported="false" />
@@ -50,17 +51,18 @@
         <activity
             android:name=".MainActivity"
             android:exported="true" />
+
         <service
             android:name=".BackgroundServices.StepCountingService"
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="location"
-            android:stopWithTask="false"
-            />
+            android:stopWithTask="false" />
 
         <receiver
             android:name=".BackgroundServices.CountReciver"
             android:exported="false">
+
             <!-- If your receiver is intended to be accessible from outside your app -->
             <!-- Specify other attributes as needed -->
         </receiver>
