@@ -60,6 +60,14 @@ private Integer intPKUserID;
     @Expose
     private String referByFullName;
 
+    @SerializedName("motiv8Point")
+    @Expose
+    private String motiv8Point;
+
+    @SerializedName("totalStep")
+    @Expose
+    private String totalStep;
+
     public Integer getIntPKUserID() {
         return intPKUserID;
     }
@@ -204,4 +212,19 @@ private Integer intPKUserID;
         this.referByFullName = referByFullName;
     }
 
+    public String getMotiv8Point() {
+        return motiv8Point;
+    }
+
+    public void setMotiv8Point(String motiv8Point) {
+        this.motiv8Point = motiv8Point;
+    }
+
+    public String getTotalStep() {
+        return totalStep;
+    }
+
+    public void setTotalStep(String totalStep) {
+        this.totalStep = totalStep;
+    }
 }

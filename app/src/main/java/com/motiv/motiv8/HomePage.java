@@ -40,7 +40,10 @@ import com.motiv.motiv8.R;
 import com.motiv.motiv8.Retrofit.ApiService;
 import com.motiv.motiv8.Retrofit.RestClient;
 import com.motiv.motiv8.UI.ProfilePage;
+import com.motiv.motiv8.Utils.CustomProgress;
+import com.motiv.motiv8.Utils.MySharedPreferences;
 import com.motiv.motiv8.model.AllProductResponse;
+import com.motiv.motiv8.model.LoginResponse;
 import com.motiv.motiv8.model.PincodeResponse;
 import com.motiv.motiv8.model.PushStepResponse;
 
@@ -79,19 +82,29 @@ public class HomePage extends AppCompatActivity implements CountReciver.StepCoun
     Runnable updateTextRunnable;
 
     int firstTimeGetData=0;
-    TextView txtStepCount;
+    TextView txtStepCount,txtTotalPoint,txtTotalSteps,txtUserId;
     ImageView ic_menubar;
     RecyclerView recViewProducts;
     CardView cvClaimStep;
     Intent serviceIntent;
+    LoginResponse loginResponse;
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
+        loginResponse= MySharedPreferences.getLoginObject(HomePage.this,LoginResponse.class);
+
         intent=getIntent();
         txtUserName=findViewById(R.id.txtUserName);
         ic_menubar=findViewById(R.id.ic_menubar);
+        txtTotalPoint=findViewById(R.id.txtTotalPoint);
+        txtTotalSteps=findViewById(R.id.txtTotalSteps);
+        txtUserId=findViewById(R.id.txtUserId);
+        txtTotalSteps.setText(loginResponse.getUserDetail().getTotalStep());
+        txtTotalPoint.setText(loginResponse.getUserDetail().getMotiv8Point());
+        txtUserId.setText("ID: "+loginResponse.getUserDetail().getStrLoginID());
+
       //  cvStepCount=findViewById(R.id.cvStepCount);
         userName= intent.getStringExtra("username");
         userId= intent.getStringExtra("userId");
@@ -156,7 +169,10 @@ public class HomePage extends AppCompatActivity implements CountReciver.StepCoun
         findViewById(R.id.cvProfilePic).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(HomePage.this, ProfilePage.class));
+                Intent i=new Intent(HomePage.this, ProfilePage.class);
+                i.putExtra("userId",userId);
+                i.putExtra("password",password);
+                startActivity(i);
             }
         });
 
@@ -191,6 +207,8 @@ public class HomePage extends AppCompatActivity implements CountReciver.StepCoun
     }
 
     private void getAllProducts() {
+        CustomProgress customProgress=new CustomProgress();
+        customProgress.showProgress(HomePage.this,"Please wait...",false);
         RestClient restClient=new RestClient();
         ApiService apiService= restClient.getApiService();
         Call<AllProductResponse> call=apiService.getAllProductList(userId,password);
@@ -201,10 +219,12 @@ public class HomePage extends AppCompatActivity implements CountReciver.StepCoun
                     AllProductResponse allProductResponse=response.body();
                     recViewProducts.setAdapter(new AllProductsAdapter(HomePage.this,allProductResponse.getProducts()));
                 }
+                customProgress.hideProgress();
             }
 
             @Override
             public void onFailure(Call<AllProductResponse> call, Throwable t) {
+                customProgress.hideProgress();
 
             }
         });
@@ -268,7 +288,7 @@ public class HomePage extends AppCompatActivity implements CountReciver.StepCoun
         if (firstTimeGetData == 0) {
             startStep = totalSteps;
             firstTimeGetData++;
-            txtStepCount.setText("Total Steps: " + startStep);
+            txtStepCount.setText("Steps: " + startStep);
         }
 
         final Handler handler = new Handler();
@@ -281,7 +301,7 @@ public class HomePage extends AppCompatActivity implements CountReciver.StepCoun
                 // Increment total steps
                 startStep++;
 
-                txtStepCount.setText("Total Steps: " + startStep);
+                txtStepCount.setText("Steps: " + startStep);
 
                 // Check if total steps reaches the maximum value
                 if (finalTotalSteps <= startStep) {

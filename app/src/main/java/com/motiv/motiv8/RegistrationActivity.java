@@ -1,7 +1,9 @@
 package com.motiv.motiv8;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -19,6 +21,7 @@ import android.widget.Toast;
 import com.google.gson.JsonObject;
 import com.motiv.motiv8.Retrofit.ApiService;
 import com.motiv.motiv8.Retrofit.RestClient;
+import com.motiv.motiv8.Utils.CustomProgress;
 import com.motiv.motiv8.model.Pincode;
 import com.motiv.motiv8.model.PincodeResponse;
 import com.motiv.motiv8.model.RegistrationResponse;
@@ -41,10 +44,13 @@ LinearLayout refLayout;
 Intent intent;
 int refValid=0;
 String referCode;
+
+    CustomProgress customProgress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+        customProgress=new CustomProgress();
         etPINCODE=findViewById(R.id.etPINCODE);
         etPassword=findViewById(R.id.etPassword);
         etEmail=findViewById(R.id.etEmail);
@@ -88,6 +94,7 @@ String referCode;
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (etPINCODE.getText().toString().trim().length()==6){
+                    customProgress.showProgress(RegistrationActivity.this,"Data Fetching from PINCODE",false);
                  Retrofit   retrofit = new Retrofit.Builder()
                             .baseUrl("https://api.tantrash.com/API/")
                             .addConverterFactory(GsonConverterFactory.create())
@@ -114,6 +121,7 @@ String referCode;
                                 etCounry.setText("");
                                 Toast.makeText(RegistrationActivity.this, "Please check and enter correct PINCODE", Toast.LENGTH_SHORT).show();
                             }
+                            customProgress.hideProgress();
                         }
 
                         @Override
@@ -122,6 +130,8 @@ String referCode;
                             etState.setText("");
                             etCounry.setText("");
                             Toast.makeText(RegistrationActivity.this, "Sorry! we did not fetch the details", Toast.LENGTH_SHORT).show();
+                            customProgress.hideProgress();
+
 
                         }
                     });
@@ -161,6 +171,7 @@ String referCode;
             @Override
             public void onClick(View view) {
                 if (validateForm()){
+                    customProgress.showProgress(RegistrationActivity.this,"Registration in progress...",false);
                     RestClient restClient=new RestClient();
                     ApiService apiService=restClient.getApiService();
                     Call<RegistrationResponse> call=apiService.doRegister(getJsonObjeReg());
@@ -172,18 +183,36 @@ String referCode;
                             if (response.isSuccessful()){
                                 RegistrationResponse registrationResponse=response.body();
                                 if (registrationResponse.getAssocaite()!=null){
-                                    Toast.makeText(RegistrationActivity.this, registrationResponse.getStatusMessage(), Toast.LENGTH_SHORT).show();
-                                    Toast.makeText(RegistrationActivity.this, "Please login with your mobile number and password", Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(RegistrationActivity.this,Dashboard_Page.class));
+                                    AlertDialog.Builder builder=new AlertDialog.Builder(RegistrationActivity.this);
+                                    builder.setCancelable(false);
+                                    builder.setTitle("Registration Response");
+                                    builder.setMessage(registrationResponse.getStatusMessage());
+                                    builder.setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            Toast.makeText(RegistrationActivity.this, "Please login with your mobile number and password", Toast.LENGTH_SHORT).show();
+                                            dialogInterface.dismiss();
+                                            startActivity(new Intent(RegistrationActivity.this,MainActivity.class));
+                                            finish();
+
+                                        }
+                                    });
+                                    AlertDialog alertDialog=builder.create();
+                                    alertDialog.show();
+
+
                                 }else{
                                     Toast.makeText(RegistrationActivity.this, registrationResponse.getStatusMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }
+                            customProgress.hideProgress();
                         }
 
                         @Override
                         public void onFailure(Call<RegistrationResponse> call, Throwable t) {
                             Toast.makeText(RegistrationActivity.this, t.getCause().getMessage(), Toast.LENGTH_SHORT).show();
+                            customProgress.hideProgress();
+
 
                         }
                     });
@@ -256,36 +285,56 @@ String referCode;
     }
 
     private boolean validateForm() {
+        customProgress.showProgress(RegistrationActivity.this,"Validating Details",false);
         if (etName.getText().toString().trim().length()<1){
             etName.setError("Please Enter Name");
+            customProgress.hideProgress();
             return false;
         }else     if (etMobile.getText().toString().trim().length()<1){
             etMobile.setError("Please Enter Phone Number");
+            customProgress.hideProgress();
+
             return false;
         }else     if (etEmail.getText().toString().trim().length()<1){
             etEmail.setError("Please Enter Email");
+            customProgress.hideProgress();
+
             return false;
         }else     if (etPassword.getText().toString().trim().length()<1){
             etPassword.setError("Please Enter Password");
+            customProgress.hideProgress();
+
             return false;
         }else     if (etCity.getText().toString().trim().length()<1){
             etCity.setError("Please Enter City");
+            customProgress.hideProgress();
+
             return false;
         }else     if (etState.getText().toString().trim().length()<1){
             etState.setError("Please Enter State Name");
+            customProgress.hideProgress();
+
             return false;
         }else     if (etCounry.getText().toString().trim().length()<1){
             etCounry.setError("Please Enter Country Name");
+            customProgress.hideProgress();
+
             return false;
         }else     if (etPINCODE.getText().toString().trim().length()<1){
             etPINCODE.setError("Please Enter PIN code");
+            customProgress.hideProgress();
+
             return false;
         }else if (refLayout.getVisibility()==View.VISIBLE && refValid==0){
             etReferCode.setError("Please Enter Valid Referral code");
             Toast.makeText(this, "Invalid Referral code", Toast.LENGTH_SHORT).show();
+            customProgress.hideProgress();
+
             return  false;
         }
         else {
+            customProgress.hideProgress();
+
             return true;
         }
     }

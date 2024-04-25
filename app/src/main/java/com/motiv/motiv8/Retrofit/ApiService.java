@@ -10,6 +10,7 @@ import com.motiv.motiv8.model.AllPointLedgerResponse;
 import com.motiv.motiv8.model.AllProductResponse;
 import com.motiv.motiv8.model.LoginResponse;
 import com.motiv.motiv8.model.PincodeResponse;
+import com.motiv.motiv8.model.ProfilePageDetails;
 import com.motiv.motiv8.model.PushStepResponse;
 import com.motiv.motiv8.model.RegistrationResponse;
 
@@ -64,6 +65,16 @@ public  interface ApiService {
 
     @GET("motiv8/PointLedger")
     Call<AllPointLedgerResponse> getAllPointLedger(@Query("sLoginID") String sLoginID, @Query("sPassword") String sPassword, @Query("fromDateDDMMYYYY") String fromDateDDMMYYYY, @Query("toDateDDMMYYYY") String toDateDDMMYYYY);
+
+
+
+
+    @GET("Motiv8/GetProfile")
+    Call<ProfilePageDetails> getProfileDetails(@Query("sLoginID") String sLoginID, @Query("sPassword") String sPassword);
+
+
+    @PUT("Motiv8/UpdateProfile")
+    Call<ProfilePageDetails> updateProfileDetails(@Body JsonObject jsonObject);
 
 
 

@@ -3,4 +3,5 @@
     <string name="balance_132_2">Balance <b>$132.2</b></string>
     <string name="user_id">User ID *</string>
     <string name="password">Password *</string>
+    <string name="done">Done</string>
 </resources>

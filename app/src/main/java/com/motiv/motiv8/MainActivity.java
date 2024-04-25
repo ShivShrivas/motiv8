@@ -14,6 +14,8 @@ import android.widget.Toast;
 import com.motiv.motiv8.Retrofit.ApiService;
 import com.motiv.motiv8.Retrofit.RestClient;
 
+import com.motiv.motiv8.Utils.CustomProgress;
+import com.motiv.motiv8.Utils.MySharedPreferences;
 import com.motiv.motiv8.model.LoginResponse;
 
 import retrofit2.Call;
@@ -25,11 +27,12 @@ Button loginButton;
 TextView signupText;
 
 EditText etpassword,etusername;
+CustomProgress customProgress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        customProgress=new CustomProgress();
         loginButton=findViewById(R.id.loginButton);
         signupText=findViewById(R.id.signupText);
         etusername=findViewById(R.id.etusername);
@@ -45,6 +48,8 @@ EditText etpassword,etusername;
                    etpassword.setError("Please Enter Password");
                    Toast.makeText(MainActivity.this, "Password Invalid!!", Toast.LENGTH_SHORT).show();
                }else {
+                   customProgress.showProgress(MainActivity.this,"Login in progress..",false);
+
                    RestClient restClient=new RestClient();
                    ApiService apiService=restClient.getApiService();
                    Call<LoginResponse> call=apiService.getLogin(etusername.getText().toString().trim(),etpassword.getText().toString().trim());
@@ -54,11 +59,13 @@ EditText etpassword,etusername;
                            if (response.isSuccessful()){
                                LoginResponse loginResponse=response.body();
                                if (loginResponse.getUserDetail()!=null){
+                                   MySharedPreferences.saveLoginObject(getApplicationContext(), loginResponse);
                                    Intent i=new Intent(MainActivity.this, HomePage.class);
                                    i.putExtra("username",loginResponse.getUserDetail().getStrFullName().isEmpty()?"Unknown":loginResponse.getUserDetail().getStrFullName());
                                    i.putExtra("userId",etusername.getText().toString().trim());
                                    i.putExtra("password",etpassword.getText().toString().trim());
                                                                     startActivity(i);
+                                                                    finish();
                                }else{
                                    Toast.makeText(MainActivity.this, loginResponse.getStatusMessage(), Toast.LENGTH_SHORT).show();
                                }
@@ -66,12 +73,14 @@ EditText etpassword,etusername;
                            }else{
                                Toast.makeText(MainActivity.this, "Login Failed!", Toast.LENGTH_SHORT).show();
                            }
+                           customProgress.hideProgress();
 
                        }
 
                        @Override
                        public void onFailure(Call<LoginResponse> call, Throwable t) {
                            Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                           customProgress.hideProgress();
 
                        }
                    });
