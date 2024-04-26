@@ -38,4 +38,12 @@ public class LoginResponse {
         this.userDetail = userDetail;
     }
 
+    public LoginResponse() {
+    }
+
+    public LoginResponse(Integer statusCode, String statusMessage, UserDetail userDetail) {
+        this.statusCode = statusCode;
+        this.statusMessage = statusMessage;
+        this.userDetail = userDetail;
+    }
 }

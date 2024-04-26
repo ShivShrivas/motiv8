@@ -64,10 +64,12 @@ CustomProgress customProgress;
                                    i.putExtra("username",loginResponse.getUserDetail().getStrFullName().isEmpty()?"Unknown":loginResponse.getUserDetail().getStrFullName());
                                    i.putExtra("userId",etusername.getText().toString().trim());
                                    i.putExtra("password",etpassword.getText().toString().trim());
+                                   Log.d("TAG", "onResponse: "+loginResponse.getUserDetail().getStrFullName());
                                                                     startActivity(i);
                                                                     finish();
+                                   Toast.makeText(MainActivity.this, MySharedPreferences.getLoginObject(getApplicationContext(), LoginResponse.class).getStatusMessage(), Toast.LENGTH_SHORT).show();
+
                                }else{
-                                   Toast.makeText(MainActivity.this, loginResponse.getStatusMessage(), Toast.LENGTH_SHORT).show();
                                }
 
                            }else{

@@ -13,6 +13,9 @@ import android.os.Bundle;
 import android.Manifest;
 import android.os.Handler;
 
+import com.motiv.motiv8.Utils.MySharedPreferences;
+import com.motiv.motiv8.model.LoginResponse;
+
 public class Splash_Screen extends AppCompatActivity {
     private static final String[] PERMISSIONS = {
             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -31,12 +34,26 @@ public class Splash_Screen extends AppCompatActivity {
             }
         }
         if (allPermissionsGranted) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    startActivity(new Intent(Splash_Screen.this,MainActivity.class));
-                }
-            },4000);
+            LoginResponse loginResponse=MySharedPreferences.getLoginObject(Splash_Screen.this, LoginResponse.class);
+
+            if(loginResponse!=null &&loginResponse.getStatusCode()==200){
+                Intent i=new Intent(Splash_Screen.this, HomePage.class);
+                i.putExtra("username",loginResponse.getUserDetail().getStrFullName().isEmpty()?"Unknown":loginResponse.getUserDetail().getStrFullName());
+                i.putExtra("userId",loginResponse.getUserDetail().getStrLoginID());
+                i.putExtra("password",loginResponse.getUserDetail().getStrPWD());
+                startActivity(i);
+                finish();
+            }else{
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(Splash_Screen.this,MainActivity.class));
+                        finish();
+                    }
+                },4000);
+            }
+
+
         } else {
             // If any permission is not granted, close the app
             showPermissionAlertDialog();
@@ -78,12 +95,25 @@ public class Splash_Screen extends AppCompatActivity {
             requestPermissions();
         } else {
 
-            new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                startActivity(new Intent(Splash_Screen.this,MainActivity.class));
+            LoginResponse loginResponse=MySharedPreferences.getLoginObject(Splash_Screen.this, LoginResponse.class);
+
+            if(loginResponse!=null &&loginResponse.getStatusCode()==200){
+                Intent i=new Intent(Splash_Screen.this, HomePage.class);
+                i.putExtra("username",loginResponse.getUserDetail().getStrFullName().isEmpty()?"Unknown":loginResponse.getUserDetail().getStrFullName());
+                i.putExtra("userId",loginResponse.getUserDetail().getStrLoginID());
+                i.putExtra("password",loginResponse.getUserDetail().getStrPWD());
+                startActivity(i);
+                finish();
+            }else{
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(Splash_Screen.this,MainActivity.class));
+                        finish();
+                    }
+                },4000);
             }
-        },4000);
+
 
 
         }
