@@ -108,12 +108,17 @@ String referCode;
                         public void onResponse(Call<PincodeResponse> call, Response<PincodeResponse> response) {
                             if (response.isSuccessful()){
                                 PincodeResponse pincodeResponse=response.body();
-                                if (pincodeResponse.getPincodeList().size()>=1){
+                                if (pincodeResponse.getPincodeList()!=null && pincodeResponse.getPincodeList().size()>=1){
 
                                     Pincode pincode=pincodeResponse.getPincodeList().get(0);
                                     etCity.setText(pincode.getDistrictName());
                                     etState.setText(pincode.getStateName());
                                     etCounry.setText(pincode.getCountryName());
+                                }else{
+                                    etCity.setText("");
+                                    etState.setText("");
+                                    etCounry.setText("");
+                                    Toast.makeText(RegistrationActivity.this, "Please check and enter correct PINCODE", Toast.LENGTH_SHORT).show();
                                 }
                             }else{
                                 etCity.setText("");

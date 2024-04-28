@@ -39,6 +39,7 @@ import com.motiv.motiv8.model.Pincode;
 import com.motiv.motiv8.model.PincodeResponse;
 import com.motiv.motiv8.model.Profile;
 import com.motiv.motiv8.model.ProfilePageDetails;
+import com.motiv.motiv8.model.ProfilePicSavingResponse;
 import com.soundcloud.android.crop.Crop;
 import com.soundcloud.android.crop.CropImageActivity;
 import com.soundcloud.android.crop.CropImageView;
@@ -50,6 +51,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -173,12 +178,17 @@ public class ProfilePage extends AppCompatActivity {
                         public void onResponse(Call<PincodeResponse> call, Response<PincodeResponse> response) {
                             if (response.isSuccessful()){
                                 PincodeResponse pincodeResponse=response.body();
-                                if (pincodeResponse.getPincodeList().size()>=1){
+                                if (pincodeResponse.getPincodeList()!=null && pincodeResponse.getPincodeList().size()>=1){
 
                                     Pincode pincode=pincodeResponse.getPincodeList().get(0);
                                     editTextCity.setText(pincode.getDistrictName());
                                     editTextState.setText(pincode.getStateName());
                                     editTextCountry.setText(pincode.getCountryName());
+                                }else{
+                                    editTextCity.setText("");
+                                    editTextState.setText("");
+                                    editTextCountry.setText("");
+                                    Toast.makeText(ProfilePage.this, "Please check and enter correct PINCODE", Toast.LENGTH_SHORT).show();
                                 }
                             }else{
                                 editTextCity.setText("");
@@ -505,13 +515,58 @@ public class ProfilePage extends AppCompatActivity {
                     break;
                 case  Crop.REQUEST_CROP:
 
-                    Glide.with(this)
-                            .load(destinationUri)
-                            .into(imgProfile);
+
+
+                    saveProfileImageToServer(destinationUri);
+
+
                     break;
                 
             }
         }
+    }
+
+    private void saveProfileImageToServer(Uri destinationUri) {
+
+        File imageFile = new File(destinationUri.getPath());
+
+        // Create RequestBody from file
+        RequestBody requestFile =
+                RequestBody.create(MediaType.parse("image/*"), imageFile);
+
+        // Create MultipartBody.Part from RequestBody
+        MultipartBody.Part imagePart =
+                MultipartBody.Part.createFormData("image", imageFile.getName(), requestFile);
+
+        // Create RequestBody for other form data
+
+
+        // Make the API call
+        RestClient restClient=new RestClient();
+        ApiService apiService = restClient.getApiService();
+        Call<ProfilePicSavingResponse> call=apiService.updateProfilePhoto(userId,password,imagePart);
+        call.enqueue(new Callback<ProfilePicSavingResponse>() {
+            @Override
+            public void onResponse(Call<ProfilePicSavingResponse> call, Response<ProfilePicSavingResponse> response) {
+                Log.d("TAG", "onResponse: "+response.body());
+                if (response.isSuccessful()){
+                    Glide.with(ProfilePage.this)
+                            .load(destinationUri)
+                            .into(imgProfile);
+                    Toast.makeText(ProfilePage.this, response.body().getStatusMessage(), Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(ProfilePage.this, "Profile pic not updated please try again!!", Toast.LENGTH_SHORT).show();
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ProfilePicSavingResponse> call, Throwable t) {
+                Toast.makeText(ProfilePage.this, "Profile pic not updated "+t.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 
     private void startCropActivity(Uri capturedUri) {

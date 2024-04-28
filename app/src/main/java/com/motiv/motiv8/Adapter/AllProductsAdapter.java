@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.helper.widget.Layer;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,10 +47,11 @@ public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.
     public void onBindViewHolder(@NonNull AllProductViewHolder holder, int position) {
         holder.txtProductName.setText(products.get(position).getProductName());
         holder.txtCategory.setText(products.get(position).getStrCategoryName());
+        holder.txtxProdPoints.setText(products.get(position).getMotivPoint()+" Point");
         holder.txtRate.setText("₹"+products.get(position).getMrp());
         Glide.with(context).load(products.get(position).getThumbnail().toString().trim()).into(holder.imageViewProduct);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.cvBuyNow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i=new Intent(context, ProductDetailsPage.class);
@@ -66,11 +68,15 @@ public class AllProductsAdapter extends RecyclerView.Adapter<AllProductsAdapter.
     }
 
     public class AllProductViewHolder extends RecyclerView.ViewHolder {
-        TextView txtProductName,txtCategory,txtRate;
+        TextView txtProductName,txtCategory,txtRate,txtxProdPoints;
         ImageView imageViewProduct;
+        CardView cvBuyNow;
         public AllProductViewHolder(@NonNull View itemView) {
             super(itemView);
             txtProductName=itemView.findViewById(R.id.txtProductName);
+            txtxProdPoints=itemView.findViewById(R.id.txtxProdPoints);
+            cvBuyNow=itemView.findViewById(R.id.cvBuyNow);
+
             txtCategory=itemView.findViewById(R.id.txtCategory);
             txtRate=itemView.findViewById(R.id.txtRate);
             imageViewProduct=itemView.findViewById(R.id.imageViewProduct);

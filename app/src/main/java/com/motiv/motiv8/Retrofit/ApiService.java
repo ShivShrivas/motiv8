@@ -11,6 +11,7 @@ import com.motiv.motiv8.model.AllProductResponse;
 import com.motiv.motiv8.model.LoginResponse;
 import com.motiv.motiv8.model.PincodeResponse;
 import com.motiv.motiv8.model.ProfilePageDetails;
+import com.motiv.motiv8.model.ProfilePicSavingResponse;
 import com.motiv.motiv8.model.PushStepResponse;
 import com.motiv.motiv8.model.RegistrationResponse;
 import com.motiv.motiv8.model.SingleProducDetails;
@@ -19,6 +20,7 @@ import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -82,6 +84,11 @@ public  interface ApiService {
     @GET("Motiv8/ProductDetails")
     Call<SingleProducDetails> getSingleProducDetails(@Query("sLoginID") String sLoginID, @Query("sPassword") String sPassword, @Query("productId") String id);
 
-
+    @Multipart
+    @PUT("motiv8/updateProfilePhoto")
+    Call<ProfilePicSavingResponse> updateProfilePhoto(
+            @Part("loginid") String loginId,
+            @Part("pwd") String password,
+            @Part MultipartBody.Part image);
 
 }
