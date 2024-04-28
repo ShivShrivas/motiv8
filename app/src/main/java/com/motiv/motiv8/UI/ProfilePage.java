@@ -1,11 +1,23 @@
 package com.motiv.motiv8.UI;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -16,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.JsonObject;
 import com.motiv.motiv8.R;
 import com.motiv.motiv8.RegistrationActivity;
@@ -26,6 +39,16 @@ import com.motiv.motiv8.model.Pincode;
 import com.motiv.motiv8.model.PincodeResponse;
 import com.motiv.motiv8.model.Profile;
 import com.motiv.motiv8.model.ProfilePageDetails;
+import com.soundcloud.android.crop.Crop;
+import com.soundcloud.android.crop.CropImageActivity;
+import com.soundcloud.android.crop.CropImageView;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,6 +57,12 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ProfilePage extends AppCompatActivity {
+
+    private static String[] PERMISSIONS = {
+            Manifest.permission.CAMERA
+    };
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int REQUEST_PICK_IMAGE = 2;
     String userName,userId,password;
     TextView edit_text;
     EditText editTextName;
@@ -47,17 +76,26 @@ public class ProfilePage extends AppCompatActivity {
     EditText editTextPANNum;
     EditText editTextNumber;
     EditText editTextEmail;
+    ImageView imgProfile;
     Button button;
     ImageView ivArrowBack;
     Intent intent;
 
+    TextView txtProfileChange;
     CustomProgress customProgress,customProgressGetProfile,customProgressUpdateProfile;
+
+
+    private String currentPhotoPath;
+    Uri destinationUri;
+    private Uri mCameraImageUri;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_page);
 
         intent=getIntent();
+
+
 
         customProgress=new CustomProgress();
         customProgressGetProfile=new CustomProgress();
@@ -69,6 +107,7 @@ public class ProfilePage extends AppCompatActivity {
         edit_text=findViewById(R.id.edit_text);
 
         editTextName = findViewById(R.id.editTextName);
+        imgProfile = findViewById(R.id.imgProfile);
         editTextSolustion = findViewById(R.id.editTextSolustion);
         editTextAddress = findViewById(R.id.editTextAddress);
         editTextPIN = findViewById(R.id.editTextPIN);
@@ -79,8 +118,15 @@ public class ProfilePage extends AppCompatActivity {
         editTextNumber = findViewById(R.id.editTextNumber);
         editTextEmail = findViewById(R.id.editTextEmail);
         button = findViewById(R.id.button);
+        txtProfileChange = findViewById(R.id.txtProfileChange);
         ivArrowBack = findViewById(R.id.ivArrowBack);
         getProfileDetails();
+        txtProfileChange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                uploadProfilePic();
+            }
+        });
         ivArrowBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -168,6 +214,88 @@ public class ProfilePage extends AppCompatActivity {
         });
 
         pageDiabled();
+    }
+
+    private void uploadProfilePic() {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
+
+            String[] PERMISSIONS_Storage = {
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+            };
+            PERMISSIONS=PERMISSIONS_Storage;
+        }
+        if (!checkPermissions()) {
+            requestPermissions();
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Select Image");
+            builder.setItems(new CharSequence[]{"Take Photo", "Choose from Gallery"}, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                        case 0:
+                            dispatchTakePictureIntent();
+                            break;
+                        case 1:
+                            openGallery();
+                            break;
+                    }
+                }
+            });
+            builder.show();
+        }
+
+
+    }
+
+    // Method to open the camera
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                ex.printStackTrace();
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.motiv.motiv8.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }
+
+    // Create a file to save the image
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+
+    // Method to open the gallery
+    private void openGallery() {
+        Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(pickPhoto , REQUEST_PICK_IMAGE);
     }
 
     private void saveDataToServer() {
@@ -357,5 +485,116 @@ public class ProfilePage extends AppCompatActivity {
         button.setVisibility(View.VISIBLE);
         editTextEmail.setEnabled(true);
 
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_IMAGE_CAPTURE:
+                    Log.d("TAG", "onActivityResult: "+currentPhotoPath);
+
+                    Uri capturedUri = Uri.fromFile(new File(currentPhotoPath));
+                    startCropActivity(capturedUri);
+                    break;
+                case REQUEST_PICK_IMAGE:
+                    Uri capturedUri1 = data.getData();
+                    startCropActivity(capturedUri1);
+                    break;
+                case  Crop.REQUEST_CROP:
+
+                    Glide.with(this)
+                            .load(destinationUri)
+                            .into(imgProfile);
+                    break;
+                
+            }
+        }
+    }
+
+    private void startCropActivity(Uri capturedUri) {
+        // Create a destination file for the cropped image
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = null;
+        try {
+            image = File.createTempFile(
+                    imageFileName,  /* prefix */
+                    ".jpg",         /* suffix */
+                    storageDir      /* directory */
+            );
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        //File destinationFile = new File(getCacheDir(), "cropped_image.jpg");
+         destinationUri = Uri.fromFile(image);
+
+        // Check if the destination directory exists and create it if necessary
+        File destinationDirectory = new File(destinationUri.getPath()).getParentFile();
+        if (!destinationDirectory.exists()) {
+            destinationDirectory.mkdirs();
+        }
+      //  Uri destinationUri = Uri.fromFile(new File(getCacheDir(), "cropped"));
+        Crop.of(capturedUri, destinationUri).asSquare().start(this);
+    }
+
+    private final ActivityResultLauncher<String[]> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), permissions -> {
+        boolean allPermissionsGranted = true;
+        for (Boolean isGranted : permissions.values()) {
+            if (!isGranted) {
+                allPermissionsGranted = false;
+                break;
+            }
+        }
+        if (allPermissionsGranted) {
+           AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Select Image");
+            builder.setItems(new CharSequence[]{"Take Photo", "Choose from Gallery"}, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                        case 0:
+                            dispatchTakePictureIntent();
+                            break;
+                        case 1:
+                            openGallery();
+                            break;
+                    }
+                }
+            });
+            builder.show();
+        } else {
+            // If any permission is not granted, close the app
+            showPermissionAlertDialog();
+        }
+    });
+    private boolean checkPermissions() {
+        for (String permission : PERMISSIONS) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
+    }
+    private void showPermissionAlertDialog() {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setMessage("This app requires all permissions to function properly. Please grant all permissions to continue.")
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Close the app
+                        finish();
+                    }
+                });
+        android.app.AlertDialog alert = builder.create();
+        alert.show();
+    }
+    private void requestPermissions() {
+        requestPermissionLauncher.launch(PERMISSIONS);
     }
 }

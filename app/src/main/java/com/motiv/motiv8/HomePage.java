@@ -157,6 +157,7 @@ public class HomePage extends AppCompatActivity implements CountReciver.StepCoun
         });
         recViewProducts.setLayoutManager(new LinearLayoutManager(this));
         getAllProducts();
+
         ic_menubar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -217,7 +218,7 @@ public class HomePage extends AppCompatActivity implements CountReciver.StepCoun
             public void onResponse(Call<AllProductResponse> call, Response<AllProductResponse> response) {
                 if (response.isSuccessful()){
                     AllProductResponse allProductResponse=response.body();
-                    recViewProducts.setAdapter(new AllProductsAdapter(HomePage.this,allProductResponse.getProducts()));
+                    recViewProducts.setAdapter(new AllProductsAdapter(HomePage.this,allProductResponse.getProducts(),loginResponse));
                 }
                 customProgress.hideProgress();
             }

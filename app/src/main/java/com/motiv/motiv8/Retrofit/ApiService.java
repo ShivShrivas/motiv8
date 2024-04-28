@@ -13,6 +13,7 @@ import com.motiv.motiv8.model.PincodeResponse;
 import com.motiv.motiv8.model.ProfilePageDetails;
 import com.motiv.motiv8.model.PushStepResponse;
 import com.motiv.motiv8.model.RegistrationResponse;
+import com.motiv.motiv8.model.SingleProducDetails;
 
 import java.util.List;
 
@@ -76,6 +77,10 @@ public  interface ApiService {
     @PUT("Motiv8/UpdateProfile")
     Call<ProfilePageDetails> updateProfileDetails(@Body JsonObject jsonObject);
 
+
+
+    @GET("Motiv8/ProductDetails")
+    Call<SingleProducDetails> getSingleProducDetails(@Query("sLoginID") String sLoginID, @Query("sPassword") String sPassword, @Query("productId") String id);
 
 
 

@@ -8,6 +8,11 @@
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
 
     <application
         android:allowBackup="true"
@@ -18,6 +23,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Motiv8"
         tools:targetApi="31">
+        <activity
+            android:name=".UI.ProductDetailsPage"
+            android:exported="false" />
         <activity
             android:name=".LedgerPage"
             android:exported="false" />
@@ -52,6 +60,7 @@
             android:name=".MainActivity"
             android:exported="true" />
 
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
         <service
             android:name=".BackgroundServices.StepCountingService"
             android:enabled="true"
@@ -66,6 +75,15 @@
             <!-- If your receiver is intended to be accessible from outside your app -->
             <!-- Specify other attributes as needed -->
         </receiver>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.motiv.motiv8.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>
