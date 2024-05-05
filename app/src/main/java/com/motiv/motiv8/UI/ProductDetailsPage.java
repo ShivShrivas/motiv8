@@ -151,8 +151,8 @@ public class ProductDetailsPage extends AppCompatActivity {
         txtProductDesc.setText(product.getDescr());
                 txtMRP.setText("M.R.P. : ₹"+product.getMrp());
         txtMotiv8Price.setText("Motiv8 Price : ₹"+product.getMotivePrice());
-                txtReqMotiv8PNT.setText("Motiv8 Point Required : "+product.getMotivPoint());
-        txtMotiv8AvalPNT.setText("Available Motiv8 point : "+loginResponse.getUserDetail().getMotiv8Point());
+                txtReqMotiv8PNT.setText("Motiv8 Cash Required : "+product.getMotivPoint());
+        txtMotiv8AvalPNT.setText("Available Cash point : "+loginResponse.getUserDetail().getMotiv8Point());
                 txtDiliveryCharg.setText("Delivery Charges : ₹"+product.getDeliveryCharge());
         tvBalance.setText("Balance: ₹"+loginResponse.getUserDetail().getMotiv8Point());
     }

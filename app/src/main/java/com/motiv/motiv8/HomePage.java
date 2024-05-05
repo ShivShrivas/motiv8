@@ -2,14 +2,17 @@ package com.motiv.motiv8;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.DatePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.Image;
@@ -19,10 +22,12 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.data.FileDescriptorLocalUriFetcher;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -31,6 +36,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.fitness.Fitness;
 import com.google.android.gms.fitness.request.OnDataPointListener;
+import com.google.gson.Gson;
 import com.motiv.motiv8.Adapter.AllProductsAdapter;
 import com.motiv.motiv8.BackgroundServices.CountReciver;
 import com.motiv.motiv8.BackgroundServices.StepCountingService;
@@ -45,10 +51,13 @@ import com.motiv.motiv8.Utils.MySharedPreferences;
 import com.motiv.motiv8.model.AllProductResponse;
 import com.motiv.motiv8.model.LoginResponse;
 import com.motiv.motiv8.model.PincodeResponse;
+import com.motiv.motiv8.model.ProfilePageDetails;
 import com.motiv.motiv8.model.PushStepResponse;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -80,6 +89,7 @@ public class HomePage extends AppCompatActivity implements CountReciver.StepCoun
     int startStep=0;
     private BroadcastReceiver stepCountReceiver;
     Runnable updateTextRunnable;
+    ProfilePageDetails profilePageDetails;
 
     int firstTimeGetData=0;
     TextView txtStepCount,txtTotalPoint,txtTotalSteps,txtUserId;
@@ -88,6 +98,9 @@ public class HomePage extends AppCompatActivity implements CountReciver.StepCoun
     CardView cvClaimStep;
     Intent serviceIntent;
     LoginResponse loginResponse;
+    ImageView imgVProfile;
+
+    private Calendar myCalendar;
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +113,7 @@ public class HomePage extends AppCompatActivity implements CountReciver.StepCoun
         ic_menubar=findViewById(R.id.ic_menubar);
         txtTotalPoint=findViewById(R.id.txtTotalPoint);
         txtTotalSteps=findViewById(R.id.txtTotalSteps);
+        imgVProfile=findViewById(R.id.imgVProfile);
         txtUserId=findViewById(R.id.txtUserId);
         txtTotalSteps.setText(loginResponse.getUserDetail().getTotalStep());
         txtTotalPoint.setText(loginResponse.getUserDetail().getMotiv8Point());
@@ -113,50 +127,44 @@ public class HomePage extends AppCompatActivity implements CountReciver.StepCoun
         txtStepCount=findViewById(R.id.txtStepCount);
         recViewProducts=findViewById(R.id.recViewProducts);
         cvClaimStep=findViewById(R.id.cvClaimStep);
+
+        myCalendar = Calendar.getInstance();
+
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateLabel();
+            }
+
+        };
+
         cvClaimStep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (startStep==0){
-                    Toast.makeText(HomePage.this, "you should have at least one step", Toast.LENGTH_SHORT).show();
-                }else{
-                    Date currentDate = new Date();
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-                    String currentDateFormatted = dateFormat.format(currentDate);
-                    RestClient restClient=new RestClient();
-                    ApiService apiService=restClient.getApiService();
-                    Call<PushStepResponse> call=apiService.claimStepsWithDate(userId,password,startStep,currentDateFormatted);
-                    call.enqueue(new Callback<PushStepResponse>() {
-                        @Override
-                        public void onResponse(Call<PushStepResponse> call, Response<PushStepResponse> response) {
-                            if (response.isSuccessful()){
-                                PushStepResponse pushStepResponse=response.body();
-                                if (pushStepResponse.getStatusCode()==200){
-                                    Toast.makeText(HomePage.this, "Steps claimed successfully!!", Toast.LENGTH_SHORT).show();
-                                }else if(pushStepResponse.getStatusCode()==100){
-                                    Toast.makeText(HomePage.this, pushStepResponse.getStatusMessage(), Toast.LENGTH_SHORT).show();
+//                if (startStep==0){
+//                    Toast.makeText(HomePage.this, "you should have at least one step", Toast.LENGTH_SHORT).show();
+//                }else{
+                DatePickerDialog datePickerDialog = new DatePickerDialog(HomePage.this, date, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH));
 
-                                }
-                            }else {
+                // Disable future dates
+                datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis() - (24*60*60*1000));
 
-                                Toast.makeText(HomePage.this, "something went wrong please try again later", Toast.LENGTH_SHORT).show();
-                            }
-                        }
+                datePickerDialog.show();
 
-                        @Override
-                        public void onFailure(Call<PushStepResponse> call, Throwable t) {
-                            Toast.makeText(HomePage.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+//                }
 
-                        }
-                    });
-                    Intent intent = new Intent(HomePage.this, StepCountingService.class);
-                    stopService(intent);
-
-                }
-             
             }
         });
         recViewProducts.setLayoutManager(new LinearLayoutManager(this));
         getAllProducts();
+        getProfileDetails();
 
         ic_menubar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,6 +172,9 @@ public class HomePage extends AppCompatActivity implements CountReciver.StepCoun
                 Intent i=new Intent(HomePage.this, MenuPage.class);
                 i.putExtra("userId",userId);
                 i.putExtra("password",password);
+                i.putExtra("username",userName);
+                i.putExtra("profilePicUrl",profilePageDetails.getProfile().getPhoto().trim()==null?"":profilePageDetails.getProfile().getPhoto().trim());
+
                 startActivity(i);
             }
         });
@@ -207,6 +218,69 @@ public class HomePage extends AppCompatActivity implements CountReciver.StepCoun
         }
     }
 
+    private void getProfileDetails() {
+        CustomProgress customProgressGetProfile=new CustomProgress();
+        customProgressGetProfile.showProgress(HomePage.this,"Fetching data from server...",false);
+        RestClient restClient=new RestClient();
+        ApiService apiService=restClient.getApiService();
+        Call<ProfilePageDetails> call=apiService.getProfileDetails(userId,password);
+        call.enqueue(new Callback<ProfilePageDetails>() {
+            @Override
+            public void onResponse(Call<ProfilePageDetails> call, Response<ProfilePageDetails> response) {
+                if (response.isSuccessful()){
+                    profilePageDetails=response.body();
+                    if (response.body().getProfile().getLoginID().length()>1){
+                        Glide.with(HomePage.this).load(profilePageDetails.getProfile().getPhoto().trim()).into(imgVProfile);
+                    }
+                }
+                customProgressGetProfile.hideProgress();
+            }
+
+            @Override
+            public void onFailure(Call<ProfilePageDetails> call, Throwable t) {
+                customProgressGetProfile.hideProgress();
+
+
+            }
+        });
+    }
+    private void updateLabel() {
+        String myFormat = "dd-MM-yyyy"; //In which you need put here
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        String currentDateFormatted = sdf.format(myCalendar.getTime());
+
+        // Call your API with formatted date
+
+        RestClient restClient=new RestClient();
+        ApiService apiService=restClient.getApiService();
+        Call<PushStepResponse> call=apiService.claimStepsWithDate(userId,password,startStep,currentDateFormatted);
+        call.enqueue(new Callback<PushStepResponse>() {
+            @Override
+            public void onResponse(Call<PushStepResponse> call, Response<PushStepResponse> response) {
+                Log.d("TAG", "onResponse: "+new Gson().toJson(response.body()));
+                if (response.isSuccessful()){
+                    PushStepResponse pushStepResponse=response.body();
+                    if (pushStepResponse.getStatusCode()==200){
+                        Toast.makeText(HomePage.this, "Steps claimed successfully!!", Toast.LENGTH_SHORT).show();
+                    }else if(pushStepResponse.getStatusCode()==100){
+                        Toast.makeText(HomePage.this, pushStepResponse.getStatusMessage(), Toast.LENGTH_SHORT).show();
+
+                    }
+                }else {
+
+                    Toast.makeText(HomePage.this, "something went wrong please try again later", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PushStepResponse> call, Throwable t) {
+                Toast.makeText(HomePage.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        Intent intent = new Intent(HomePage.this, StepCountingService.class);
+        stopService(intent);
+    }
     private void getAllProducts() {
         CustomProgress customProgress=new CustomProgress();
         customProgress.showProgress(HomePage.this,"Please wait...",false);

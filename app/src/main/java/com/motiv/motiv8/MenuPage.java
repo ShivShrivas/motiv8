@@ -8,7 +8,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.motiv.motiv8.Utils.MySharedPreferences;
 import com.motiv.motiv8.model.LoginResponse;
 
@@ -16,8 +18,11 @@ public class MenuPage extends AppCompatActivity {
 
     ImageView ivArrowBack;
     LinearLayout llStepLedger,llPointsLedger;
-    String userId,password;
+    String userId,password,username,profilePicUrl;
+
+    TextView txtUsername;
     LinearLayout llLogout;
+    ImageView imgVProfile;
 
     Intent i;
     @Override
@@ -27,10 +32,18 @@ public class MenuPage extends AppCompatActivity {
         i=getIntent();
         userId=i.getStringExtra("userId");
         password=i.getStringExtra("password");
+        username=i.getStringExtra("username");
+        profilePicUrl=i.getStringExtra("profilePicUrl");
         ivArrowBack=findViewById(R.id.ivArrowBack);
+        imgVProfile=findViewById(R.id.imgVProfile);
+        txtUsername=findViewById(R.id.txtUsername);
+        txtUsername.setText(username);
         llLogout=findViewById(R.id.llLogout);
         llPointsLedger=findViewById(R.id.llPointsLedger);
         llStepLedger=findViewById(R.id.llStepLedger);
+        if (profilePicUrl.length()>2){
+            Glide.with(MenuPage.this).load(profilePicUrl).into(imgVProfile);
+        }
         llLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

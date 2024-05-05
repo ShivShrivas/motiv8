@@ -44,9 +44,10 @@
                     android:layout_height="match_parent">
 
                     <ImageView
+                        android:id="@+id/imgVProfile"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/profile_ic" />
+                         />
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -68,7 +69,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:fontFamily="@font/rubik_bold"
-        android:text="Good mormning, Karunesh"
+
         android:textColor="@color/white"
         android:textSize="17dp"
         android:textStyle="bold"
@@ -83,7 +84,7 @@
 
         android:layout_marginTop="-10dp"
         android:fontFamily="@font/rubik_bold"
-        android:text="ID:1112345686"
+        android:text="ID:"
         android:textColor="@color/white"
         android:textSize="14dp"
         android:textStyle="bold"
@@ -299,7 +300,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:fontFamily="@font/rubik_bold"
-        android:text="Eat Anytime Special"
+        android:text="Get Anytime Special"
         android:textColor="@color/white"
         android:textSize="16dp"
         app:layout_constraintStart_toStartOf="@+id/cardView6"

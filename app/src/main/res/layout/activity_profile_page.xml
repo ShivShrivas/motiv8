@@ -77,7 +77,7 @@
                 android:layout_width="match_parent"
                 android:id="@+id/imgProfile"
                 android:layout_height="match_parent"
-                android:src="@drawable/profile_ic" />
+                />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -137,7 +137,6 @@
                     android:layout_weight="1"
                     android:background="#00001039"
                     android:maxLength="15"
-                    android:text="Karunesh"
                     android:textAlignment="textEnd"
                     android:textColor="@color/sky_blue"
                     android:textSize="15dp"
@@ -167,7 +166,7 @@
                     android:layout_weight="1"
                     android:background="#00001039"
                     android:maxLength="8"
-                    android:text="MR"
+
                     android:textAlignment="textEnd"
                     android:textColor="@color/sky_blue"
                     android:textSize="15dp"
@@ -230,7 +229,7 @@
                     android:background="#00001039"
                     android:maxLength="6"
                     android:inputType="number"
-                    android:text="223150"
+
                     android:textAlignment="textEnd"
                     android:textColor="@color/sky_blue"
                     android:textSize="15dp"
@@ -262,7 +261,7 @@
                     android:background="#00001039"
                     android:maxLength="20"
 
-                    android:text="Lucknow"
+
                     android:textAlignment="textEnd"
                     android:textColor="@color/sky_blue"
                     android:textSize="15dp"
@@ -293,7 +292,7 @@
                     android:layout_weight="1"
                     android:background="#00001039"
 
-                    android:text="Uttar Pradesh"
+
 
                     android:textAlignment="textEnd"
                     android:textColor="@color/sky_blue"
@@ -325,7 +324,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="#00001039"
-                    android:text="India"
+
                     android:textAlignment="textEnd"
                     android:textColor="@color/sky_blue"
                     android:textSize="15dp"
@@ -356,7 +355,7 @@
                     android:layout_weight="1"
                     android:background="#00001039"
                     android:maxLength="10"
-                    android:text="LHYPS1074c"
+
                     android:textAlignment="textEnd"
 
                     android:textColor="@color/sky_blue"
@@ -415,7 +414,7 @@
                     android:layout_weight="1"
                     android:background="#00001039"
                     android:maxLength="10"
-                    android:text="9561151515"
+
                     android:inputType="number"
                     android:textAlignment="textEnd"
 
@@ -449,7 +448,7 @@
                     android:layout_weight="1"
                     android:background="#00001039"
                     android:maxLength="30"
-                    android:text="karunesh.kumar16@gmail.com"
+
                     android:inputType="textEmailAddress"
                     android:textAlignment="textEnd"
                     android:textColor="@color/sky_blue"

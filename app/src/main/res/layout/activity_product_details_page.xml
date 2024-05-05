@@ -167,7 +167,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/txtReqMotiv8PNT"
                     android:fontFamily="@font/rubik_semibold"
-                    android:text="Motiv8 Point Required : 2999.00"
+                    android:text="Motiv8 Cash Required : 2999.00"
                     android:textColor="@color/black"
 
                     android:textSize="12dp" />
@@ -176,7 +176,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/rubik_semibold"
-                    android:text="Available Motiv8 point : 5000.00"
+                    android:text="Available Motiv8 Cash : 5000.00"
                     android:textColor="@color/black"
                     android:id="@+id/txtMotiv8AvalPNT"
                     android:textSize="12dp" />

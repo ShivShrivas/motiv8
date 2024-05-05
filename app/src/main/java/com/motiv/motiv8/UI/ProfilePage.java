@@ -463,6 +463,9 @@ public class ProfilePage extends AppCompatActivity {
         editTextPANNum.setText(profile.getPancard());
         editTextNumber.setText(profile.getMobile());
         editTextEmail.setText(profile.getEmail());
+        Glide.with(ProfilePage.this)
+                .load(profile.getPhoto().trim())
+                .into(imgProfile);
         pageDiabled();
     }
 

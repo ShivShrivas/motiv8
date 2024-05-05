@@ -48,6 +48,10 @@ public class Profile {
     @Expose
     private String associateCode;
 
+    @SerializedName("photo")
+    @Expose
+    private String photo;
+
     public String getSolutation() {
         return solutation;
     }
@@ -158,5 +162,13 @@ public class Profile {
 
     public void setAssociateCode(String associateCode) {
         this.associateCode = associateCode;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }
