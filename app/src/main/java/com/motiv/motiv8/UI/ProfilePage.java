@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.motiv.motiv8.R;
 import com.motiv.motiv8.RegistrationActivity;
@@ -530,6 +531,9 @@ public class ProfilePage extends AppCompatActivity {
     }
 
     private void saveProfileImageToServer(Uri destinationUri) {
+        CustomProgress customProgress1=new CustomProgress();
+        customProgress1.showProgress(ProfilePage.this,"Profile Picture Saving...",false);
+
 
         File imageFile = new File(destinationUri.getPath());
 
@@ -547,27 +551,91 @@ public class ProfilePage extends AppCompatActivity {
         // Make the API call
         RestClient restClient=new RestClient();
         ApiService apiService = restClient.getApiService();
-        Call<ProfilePicSavingResponse> call=apiService.updateProfilePhoto(userId,password,imagePart);
+        Log.d("TAG", "saveProfileImageToServer: "+userId+"////"+password);
+        RequestBody useridBody=RequestBody.create(MediaType.parse("multipart/form-data"),userId);
+        RequestBody passwordBody=RequestBody.create(MediaType.parse("multipart/form-data"),password);
+        Call<ProfilePicSavingResponse> call=apiService.updateProfilePhoto(useridBody,passwordBody,imagePart);
         call.enqueue(new Callback<ProfilePicSavingResponse>() {
             @Override
             public void onResponse(Call<ProfilePicSavingResponse> call, Response<ProfilePicSavingResponse> response) {
-                Log.d("TAG", "onResponse: "+response.body());
-                if (response.isSuccessful()){
+                Log.d("TAG", "onResponse: "+new Gson().toJson(response.body()));
+                if (response.isSuccessful() && response.body().getStatusCode()==200){
                     Glide.with(ProfilePage.this)
                             .load(destinationUri)
                             .into(imgProfile);
                     Toast.makeText(ProfilePage.this, response.body().getStatusMessage(), Toast.LENGTH_SHORT).show();
                 }else{
                     Toast.makeText(ProfilePage.this, "Profile pic not updated please try again!!", Toast.LENGTH_SHORT).show();
-
+                    AlertDialog.Builder alertDialog=new AlertDialog.Builder(ProfilePage.this);
+                    alertDialog.setTitle("Server Response");
+                    alertDialog.setMessage(response.body().getStatusMessage());
+                    alertDialog.setPositiveButton("Rerty", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(ProfilePage.this);
+                            builder.setTitle("Select Image");
+                            builder.setItems(new CharSequence[]{"Take Photo", "Choose from Gallery"}, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    switch (which) {
+                                        case 0:
+                                            dispatchTakePictureIntent();
+                                            break;
+                                        case 1:
+                                            openGallery();
+                                            break;
+                                    }
+                                }
+                            });
+                            builder.show();
+                        }
+                    });
+                    alertDialog.setNegativeButton("Okay", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                            finish();
+                        }
+                    });
                 }
-
+            customProgress1.hideProgress();
             }
 
             @Override
             public void onFailure(Call<ProfilePicSavingResponse> call, Throwable t) {
                 Toast.makeText(ProfilePage.this, "Profile pic not updated "+t.getMessage(), Toast.LENGTH_SHORT).show();
-
+customProgress1.hideProgress();
+                AlertDialog.Builder alertDialog=new AlertDialog.Builder(ProfilePage.this);
+                alertDialog.setTitle("Server Response");
+                alertDialog.setMessage(t.getMessage());
+                alertDialog.setPositiveButton("Rerty", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ProfilePage.this);
+                        builder.setTitle("Select Image");
+                        builder.setItems(new CharSequence[]{"Take Photo", "Choose from Gallery"}, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which) {
+                                    case 0:
+                                        dispatchTakePictureIntent();
+                                        break;
+                                    case 1:
+                                        openGallery();
+                                        break;
+                                }
+                            }
+                        });
+                        builder.show();
+                    }
+                });
+                alertDialog.setNegativeButton("Okay", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        finish();
+                    }
+                });
             }
         });
     }

@@ -110,7 +110,6 @@
                     android:layout_marginBottom="10dp"
                     android:id="@+id/txtProductName"
                     android:fontFamily="@font/rubik_bold"
-                    android:text="Product Name"
                     android:textColor="@color/black"
                     android:textSize="15dp" />
 
@@ -120,7 +119,6 @@
                     android:id="@+id/txtProductComp_Brand"
                     android:layout_marginBottom="10dp"
                     android:fontFamily="@font/rubik_semibold"
-                    android:text="Company Name | Brand Name"
                     android:textColor="@color/black"
                     android:textSize="14dp" />
 
@@ -138,57 +136,136 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
                     android:fontFamily="@font/rubik_regular"
-                    android:text="lorem ispum lorem ispum lorem ispum lorem ispum lorem ispum lorem ispum lorem ispum lorem ispum lorem ispum lorem ispum lorem ispum lorem ispum lorem ispum lorem ispum lorem ispum lorem ispum lorem ispum lorem "
                     android:textColor="@color/black"
                     android:textSize="12dp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/rubik_semibold"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubik_semibold"
+                        android:text="M.R.P. :"
+                        android:drawableLeft="@drawable/ic_mrp_tag"
+                        android:textColor="@color/black"
+                        android:textSize="12dp" />
+                    <TextView
+                        android:textAlignment="textEnd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:foreground="@drawable/strike_through"
+                        android:fontFamily="@font/rubik_semibold"
+                        android:textColor="@color/black"
+                        android:id="@+id/txtMRP"
+                        android:textSize="12dp" />
+                </LinearLayout>
 
-                    android:text="M.R.P. : ₹2333.00"
-                    android:textColor="@color/black"
-                    android:id="@+id/txtMRP"
 
-                    android:textSize="12dp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_mrp_tag"
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/rubik_semibold"
-                    android:text="Motiv8 Price : ₹2933.00"
-                    android:textColor="@color/black"
+                        android:fontFamily="@font/rubik_semibold"
+                        android:text="Motiv8 Price :"
+                        android:textColor="@color/black"
+                        android:textSize="12dp" />
+                    <TextView
+                        android:textAlignment="textEnd"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubik_semibold"
+                        android:textColor="@color/black"
                         android:id="@+id/txtMotiv8Price"
-                    android:textSize="12dp" />
+                        android:textSize="12dp" />
+                </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/txtReqMotiv8PNT"
-                    android:fontFamily="@font/rubik_semibold"
-                    android:text="Motiv8 Cash Required : 2999.00"
-                    android:textColor="@color/black"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubik_semibold"
+                        android:text=" Motiv8 Cash Required :"
+                       android:paddingStart="4dp"
+                        android:drawableLeft="@drawable/ic_gift"
 
-                    android:textSize="12dp" />
+                        android:textColor="@color/black"
+                        android:textSize="12dp" />
+                    <TextView
+                        android:textAlignment="textEnd"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubik_semibold"
+                        android:textColor="@color/black"
+                        android:id="@+id/txtReqMotiv8PNT"
+                        android:textSize="12dp" />
+                </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/rubik_semibold"
-                    android:text="Available Motiv8 Cash : 5000.00"
-                    android:textColor="@color/black"
-                    android:id="@+id/txtMotiv8AvalPNT"
-                    android:textSize="12dp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/rubik_semibold"
-                    android:text="Delivery Charges : ₹2999.00"
-                    android:textColor="@color/black"
-                    android:id="@+id/txtDiliveryCharg"
-                    android:textSize="12dp" />
+                       <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubik_semibold"
+                        android:text=" Available Motiv8 Cash :"
+                        android:paddingStart="4dp"
+                        android:drawableLeft="@drawable/ic_star_badge"
+                        android:textColor="@color/black"
+                        android:textSize="12dp" />
+                    <TextView
+                        android:textAlignment="textEnd"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubik_semibold"
+                        android:textColor="@color/black"
+                        android:id="@+id/txtMotiv8AvalPNT"
+                        android:textSize="12dp" />
+                </LinearLayout>
+
+        <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubik_semibold"
+                        android:paddingStart="4dp"
+                        android:text=" Delivery Charges :"
+                        android:textColor="@color/black"
+                        android:drawableLeft="@drawable/ic_van"
+
+                        android:textSize="12dp" />
+                    <TextView
+                        android:textAlignment="textEnd"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubik_semibold"
+                        android:textColor="@color/black"
+                        android:id="@+id/txtDiliveryCharg"
+                        android:textSize="12dp" />
+                </LinearLayout>
+
+
+
+
+
 
                 <Button
                     android:layout_width="wrap_content"

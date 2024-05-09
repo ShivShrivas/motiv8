@@ -149,11 +149,11 @@ public class ProductDetailsPage extends AppCompatActivity {
         txtProductName.setText(product.getProductName());
                 txtProductComp_Brand.setText(product.getCompanyName()+" | "+product.getBrandName());
         txtProductDesc.setText(product.getDescr());
-                txtMRP.setText("M.R.P. : ₹"+product.getMrp());
-        txtMotiv8Price.setText("Motiv8 Price : ₹"+product.getMotivePrice());
-                txtReqMotiv8PNT.setText("Motiv8 Cash Required : "+product.getMotivPoint());
-        txtMotiv8AvalPNT.setText("Available Cash point : "+loginResponse.getUserDetail().getMotiv8Point());
-                txtDiliveryCharg.setText("Delivery Charges : ₹"+product.getDeliveryCharge());
-        tvBalance.setText("Balance: ₹"+loginResponse.getUserDetail().getMotiv8Point());
+                txtMRP.setText(" ₹"+product.getMrp()+" ");
+        txtMotiv8Price.setText("₹"+product.getMotivePrice());
+                txtReqMotiv8PNT.setText(""+product.getMotivPoint());
+        txtMotiv8AvalPNT.setText(""+loginResponse.getUserDetail().getMotiv8Point());
+                txtDiliveryCharg.setText("₹"+product.getDeliveryCharge());
+        tvBalance.setText("₹"+loginResponse.getUserDetail().getMotiv8Point());
     }
 }

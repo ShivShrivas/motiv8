@@ -87,8 +87,8 @@ public  interface ApiService {
     @Multipart
     @PUT("motiv8/updateProfilePhoto")
     Call<ProfilePicSavingResponse> updateProfilePhoto(
-            @Part("loginid") String loginId,
-            @Part("pwd") String password,
+            @Part("LoginID") RequestBody loginId,
+            @Part("PWD") RequestBody password,
             @Part MultipartBody.Part image);
 
 }
